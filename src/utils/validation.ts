@@ -5,4 +5,5 @@ export const NewPlaceSchema = Yup.object().shape({
     .min(2, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required'),
+  image: Yup.string().min(2, 'Required').required('Required'),
 })

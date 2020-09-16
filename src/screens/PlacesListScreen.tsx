@@ -1,4 +1,4 @@
-import Place from '@/models/place'
+import PlaceItem from '@/components/PlaceItem'
 import { RootState } from '@/redux/rootReducer'
 import { RootStackScreenProps } from '@/types/types'
 import React, { FunctionComponent } from 'react'
@@ -6,7 +6,9 @@ import { StyleSheet, Text, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { useSelector } from 'react-redux'
 
-const PlacesListScreen: FunctionComponent<RootStackScreenProps> = () => {
+const PlacesListScreen: FunctionComponent<RootStackScreenProps> = ({
+  navigation,
+}) => {
   const places = useSelector((state: RootState) => state.places.places)
 
   if (places.length === 0)
@@ -21,7 +23,19 @@ const PlacesListScreen: FunctionComponent<RootStackScreenProps> = () => {
   return (
     <FlatList
       data={places}
-      renderItem={(itemData) => <Text>{itemData.item.title}</Text>}
+      renderItem={(itemData) => (
+        <PlaceItem
+          onSelect={() =>
+            navigation.navigate('PlaceDetail', {
+              placeTitle: itemData.item.title,
+              placeId: itemData.item.id,
+            })
+          }
+          {...itemData.item}
+          //@ts-ignore
+          address={null}
+        />
+      )}
     />
   )
 }

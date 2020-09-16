@@ -1,4 +1,5 @@
 import HeaderButton from '@/components/HeaderButton'
+import ImgPicker from '@/components/ImagePicker'
 import Input from '@/components/Input'
 import { isAndroid } from '@/constants/Platform'
 import * as placesActions from '@/redux/places/actions'
@@ -22,7 +23,7 @@ const NewPlaceScreen: FunctionComponent<RootStackScreenProps> = ({
   return (
     <ScrollView>
       <Formik
-        initialValues={{ title: '' }}
+        initialValues={{ title: '', image: '' }}
         validationSchema={NewPlaceSchema}
         onSubmit={savePlaceHandler}
       >
@@ -59,6 +60,11 @@ const NewPlaceScreen: FunctionComponent<RootStackScreenProps> = ({
                 label="Title"
                 touched={touched.title}
                 error={errors.title}
+              />
+              <ImgPicker
+                value={values.image}
+                touched={touched.image}
+                error={errors.image}
               />
             </View>
           )

@@ -10,8 +10,18 @@ import React from 'react'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider } from 'react-redux'
 
+import { init } from './src/helpers/db'
 import Main from './src/navigation'
 import store from './src/redux/store'
+
+init()
+  .then(() => {
+    console.log('Database was initialized')
+  })
+  .catch((err) => {
+    console.log('Database initializing failed')
+    console.error(err)
+  })
 
 export default function App() {
   const [fontsLoaded] = useFonts({

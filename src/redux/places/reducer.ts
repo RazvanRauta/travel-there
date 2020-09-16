@@ -14,7 +14,11 @@ export default (
     case ADD_PLACE:
       return {
         places: state.places.concat(
-          new Place(new Date().toString(), actions.placeData.title)
+          new Place(
+            new Date().toString(),
+            actions.placeData.title,
+            actions.placeData.image
+          )
         ),
       }
     default:

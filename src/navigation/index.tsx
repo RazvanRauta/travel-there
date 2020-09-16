@@ -39,7 +39,13 @@ function Main() {
           }}
           component={NewPlaceScreen}
         />
-        <Stack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
+        <Stack.Screen
+          name="PlaceDetail"
+          component={PlaceDetailScreen}
+          options={({ route }) => ({
+            headerTitle: route.params.placeTitle,
+          })}
+        />
         <Stack.Screen
           name="PlacesList"
           options={({ navigation }) => ({
