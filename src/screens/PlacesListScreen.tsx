@@ -1,21 +1,30 @@
 import PlaceItem from '@/components/PlaceItem'
-import { RootState } from '@/redux/rootReducer'
+import * as placesActions from '@/redux/places/actions'
+import { useTypedSelector } from '@/redux/rootReducer'
 import { RootStackScreenProps } from '@/types/types'
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
-import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const PlacesListScreen: FunctionComponent<RootStackScreenProps> = ({
   navigation,
 }) => {
-  const places = useSelector((state: RootState) => state.places.places)
+  const dispatch = useDispatch()
+  const places = useTypedSelector((state) => state.places.places)
+
+  useEffect(() => {
+    dispatch(placesActions.setPlaces())
+    // return () => {
+    //   cleanup
+    // }
+  }, [dispatch])
 
   if (places.length === 0)
     return (
       <View style={styles.container}>
         <Text style={styles.message}>
-          No products were found. Maybe start adding some!
+          No places were found. Maybe start adding some!
         </Text>
       </View>
     )

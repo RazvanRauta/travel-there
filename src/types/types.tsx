@@ -1,5 +1,5 @@
 import Place from '@/models/place'
-import { ADD_PLACE } from '@/redux/places/actions'
+import { ADD_PLACE, SET_PLACES } from '@/redux/places/actions'
 import { RootState } from '@/redux/rootReducer'
 import { StackScreenProps } from '@react-navigation/stack'
 import { ThunkAction } from 'redux-thunk'
@@ -25,6 +25,7 @@ export interface PlacesState {
 }
 
 export interface ValuesForNewPlace {
+  id: string
   title: string
   image: string
 }
@@ -41,4 +42,16 @@ export type AddPlaceThunkAction = ThunkAction<
   AddPlaceAction
 >
 
-export type PlacesActionsType = AddPlaceAction
+export interface SetPlacesAction {
+  type: typeof SET_PLACES
+  places: Place[]
+}
+
+export type SetPlacesThunkAction = ThunkAction<
+  void,
+  RootState,
+  unknown,
+  SetPlacesAction
+>
+
+export type PlacesActionsType = AddPlaceAction | SetPlacesAction

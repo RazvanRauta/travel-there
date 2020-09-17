@@ -11,11 +11,13 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import { useDispatch } from 'react-redux'
 
+type Values = Omit<ValuesForNewPlace, 'id'>
+
 const NewPlaceScreen: FunctionComponent<RootStackScreenProps> = ({
   navigation,
 }) => {
   const dispatch = useDispatch()
-  const savePlaceHandler = (values: ValuesForNewPlace) => {
+  const savePlaceHandler = (values: Values) => {
     dispatch(placesActions.addPlace(values))
     navigation.goBack()
   }
