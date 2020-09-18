@@ -19,6 +19,12 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true
   },
-  "include": ["./src/*.ts", "./src/*.tsx", "./src/**/*.ts", "./src/**/*.tsx"],
+  "include": [
+    "./src/*.ts",
+    "./src/*.tsx",
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./env.d.ts"
+  ],
   "exclude": ["/node_modules/"]
 }

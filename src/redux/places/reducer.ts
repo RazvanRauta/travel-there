@@ -17,14 +17,15 @@ export default (
           new Place(
             actions.placeData.id,
             actions.placeData.title,
-            actions.placeData.image
+            actions.placeData.image,
+            actions.placeData.location
           )
         ),
       }
     case SET_PLACES:
       return {
         places: actions.places.map(
-          (pl) => new Place(pl.id.toString(), pl.title, pl.image)
+          (pl) => new Place(pl.id.toString(), pl.title, pl.image, pl.location)
         ),
       }
     default:

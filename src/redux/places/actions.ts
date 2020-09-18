@@ -14,6 +14,7 @@ export const SET_PLACES = 'SET_PLACES'
 export const addPlace = ({
   title,
   image,
+  location,
 }: Values): AddPlaceThunkAction => async (dispatch) => {
   const fileName = image.split('/').pop()
   const newPath =
@@ -31,8 +32,7 @@ export const addPlace = ({
         title,
         newPath,
         'Dummy address',
-        15.6,
-        12.3
+        location
       )
       //@ts-expect-error
       if (typeof dbResult.message === 'undefined' && dbResult.insertId) {
@@ -43,6 +43,7 @@ export const addPlace = ({
             id: dbResult.insertId.toString(),
             title,
             image: newPath ?? '',
+            location,
           },
         })
       } else {

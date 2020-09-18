@@ -26,7 +26,7 @@ const NewPlaceScreen: FunctionComponent<RootStackScreenProps> = ({
   return (
     <ScrollView>
       <Formik
-        initialValues={{ title: '', image: '', lat: '', lng: '' }}
+        initialValues={{ title: '', image: '', location: '' }}
         validationSchema={NewPlaceSchema}
         onSubmit={savePlaceHandler}
       >
@@ -64,16 +64,8 @@ const NewPlaceScreen: FunctionComponent<RootStackScreenProps> = ({
                 touched={touched.title}
                 error={errors.title}
               />
-              <ImgPicker
-                value={values.image}
-                touched={touched.image}
-                error={errors.image}
-              />
-              <LocationPicker
-                error={errors.lat || errors.lng}
-                latValue={values.lat}
-                lngValue={values.lng}
-              />
+              <ImgPicker name="image" type="text" readOnly />
+              <LocationPicker name="location" type="text" readOnly />
             </View>
           )
         }}

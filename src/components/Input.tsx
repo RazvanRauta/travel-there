@@ -27,11 +27,15 @@ const Input: FunctionComponent<InputType> = ({
   error = null,
   ...rest
 }) => {
+  let labelStyles = styles.label
+  if (touched && error) {
+    labelStyles = { ...styles.label, ...styles.labelError }
+  }
   return (
     <View style={containerStyle}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={labelStyles}>{label}</Text>
       <TextInput style={[inputStyle, styles.input]} {...rest} />
-      <Text style={styles.errorInput}>{touched && error}</Text>
+      {touched && error && <Text style={styles.errorInput}>{error}</Text>}
     </View>
   )
 }
@@ -56,5 +60,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginTop: 20,
   },
-  errorInput: { color: 'red', fontSize: 12 },
+  labelError: {
+    color: 'red',
+  },
+  errorInput: { color: 'red', fontSize: 15, marginBottom: 15 },
 })

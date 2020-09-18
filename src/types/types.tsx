@@ -28,6 +28,7 @@ export interface ValuesForNewPlace {
   id: string
   title: string
   image: string
+  location: string
 }
 
 export interface AddPlaceAction {

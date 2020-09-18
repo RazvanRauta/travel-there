@@ -1,7 +1,7 @@
 import Colors from '@/constants/Colors'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
-import { useFormikContext } from 'formik'
+import { useFormikContext, useField } from 'formik'
 import React, { FunctionComponent, useState } from 'react'
 import {
   ActivityIndicator,
@@ -12,19 +12,18 @@ import {
   View,
 } from 'react-native'
 
+import MapPreview from './MapPreview'
+
 interface Props {
-  error: string | undefined
-  latValue: string
-  lngValue: string
+  name: string
+  type: string
+  readOnly: boolean
 }
 
-const LocationPicker: FunctionComponent<Props> = ({
-  latValue,
-  lngValue,
-  error,
-}) => {
+const LocationPicker: FunctionComponent<Props> = (props) => {
   const [isFetching, setIsFetching] = useState(false)
-  const { setFieldValue, setTouched } = useFormikContext()
+  const { setFieldValue } = useFormikContext()
+  const [field, meta] = useField(props)
 
   const verifyPermission = async (): Promise<boolean> => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION)
@@ -50,8 +49,7 @@ const LocationPicker: FunctionComponent<Props> = ({
         timeout: 5000,
       })
       if (latitude && longitude) {
-        setFieldValue('lat', latitude)
-        setFieldValue('lng', longitude)
+        setFieldValue(field.name, `${latitude}|${longitude}`)
       }
     } catch (err) {
       Alert.alert(
@@ -62,20 +60,24 @@ const LocationPicker: FunctionComponent<Props> = ({
     }
     setIsFetching(false)
   }
+  const location = meta.value ? meta.value.split('|') : ''
+  const latValue = location[0] ?? ''
+  const lngValue = location[1] ?? ''
 
   return (
     <View style={styles.locationPicker}>
-      <View style={styles.mapPreview}>
+      <MapPreview lat={latValue} lng={lngValue} style={styles.mapPreview}>
         {isFetching ? (
           <ActivityIndicator size="large" />
         ) : (
-          <Text>No location chosen yet!</Text>
+          <Text style={meta.touched && meta.error ? styles.error : undefined}>
+            No location chosen yet!
+          </Text>
         )}
-      </View>
-      {latValue && lngValue ? (
-        <Text>{`Latitude:${latValue} Longitude: ${lngValue}`}</Text>
-      ) : null}
-      {error && <Text>Location Required</Text>}
+      </MapPreview>
+      {meta.touched && meta.error && (
+        <Text style={styles.error}>{meta.error}</Text>
+      )}
       <Button
         title="Get Current Location"
         color={Colors.primary}
@@ -94,6 +96,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 150,
     borderColor: '#ccc',
-    borderWidth: 1,
+  },
+  error: {
+    color: 'red',
+    fontSize: 15,
   },
 })

@@ -1,3 +1,3 @@
 declare module '@env' {
-  export const WEB_API_KEY: string
+  export const GOOGLE_API_KEY: string
 }

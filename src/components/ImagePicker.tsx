@@ -1,18 +1,19 @@
 import Colors from '@/constants/Colors'
 import * as ImagePicker from 'expo-image-picker'
 import * as Permissions from 'expo-permissions'
-import { useFormikContext } from 'formik'
+import { useFormikContext, useField } from 'formik'
 import React, { FunctionComponent } from 'react'
 import { Button, Image, StyleSheet, Text, View, Alert } from 'react-native'
 
 interface Props {
-  value: string
-  touched: boolean | undefined
-  error: string | undefined
+  name: string
+  type: string
+  readOnly: boolean
 }
 
-const ImgPicker: FunctionComponent<Props> = ({ value, touched, error }) => {
-  const { setFieldValue, setTouched } = useFormikContext()
+const ImgPicker: FunctionComponent<Props> = (props) => {
+  const { setFieldValue } = useFormikContext()
+  const [field, meta] = useField(props)
   const verifyPermission = async (): Promise<boolean> => {
     const { status } = await Permissions.askAsync(
       Permissions.CAMERA,
@@ -38,21 +39,24 @@ const ImgPicker: FunctionComponent<Props> = ({ value, touched, error }) => {
       quality: 0.5,
     })
     if (!imageData.cancelled) {
-      setFieldValue('image', imageData.uri)
+      setFieldValue(field.name, imageData.uri)
     }
-    setTouched('image', true)
   }
 
   return (
     <View style={styles.imagePicker}>
       <View style={styles.imagePreview}>
-        {!value ? (
-          <Text>No image picked yet.</Text>
+        {!meta.value ? (
+          <Text style={meta.touched && meta.error ? styles.error : undefined}>
+            No image picked yet.
+          </Text>
         ) : (
-          <Image style={styles.image} source={{ uri: value }} />
+          <Image style={styles.image} source={{ uri: meta.value }} />
         )}
       </View>
-      {touched && error && <Text style={styles.error}>{error}</Text>}
+      {meta.touched && meta.error && (
+        <Text style={styles.error}>{meta.error}</Text>
+      )}
       <Button
         title="Take Image"
         color={Colors.primary}
@@ -84,6 +88,6 @@ const styles = StyleSheet.create({
   },
   error: {
     color: 'red',
-    fontSize: 18,
+    fontSize: 15,
   },
 })

@@ -1,13 +1,13 @@
 import * as SQLite from 'expo-sqlite'
 
-const db = SQLite.openDatabase('places.db')
+const db = SQLite.openDatabase('amazingPlaces.db')
 
 export const init = () => {
   return new Promise<SQLite.SQLResultSet | SQLite.SQLError>(
     (resolve, reject) => {
       db.transaction((tx) => {
         tx.executeSql(
-          'CREATE TABLE IF NOT EXISTS places (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, image TEXT NOT NULL, address TEXT NOT NULL, lat REAL NOT NULL, lng REAL NOT NULL);',
+          'CREATE TABLE IF NOT EXISTS places (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, image TEXT NOT NULL, address TEXT NOT NULL, location TEXT NOT NULL);',
           [],
           () => resolve(),
           //@ts-ignore
@@ -22,15 +22,14 @@ export const insertPlace = (
   title: string,
   image: string,
   address: string,
-  lat: number,
-  lng: number
+  location: string
 ) => {
   return new Promise<SQLite.SQLResultSet | SQLite.SQLError>(
     (resolve, reject) => {
       db.transaction((tx) => {
         tx.executeSql(
-          'INSERT INTO places (title, image, address,lat, lng) VALUES(?,?,?,?,?)',
-          [title, image, address, lat, lng],
+          'INSERT INTO places (title, image, address,location) VALUES(?,?,?,?)',
+          [title, image, address, location],
           (_, result) => resolve(result),
           //@ts-ignore
           (_, err) => reject(err)
