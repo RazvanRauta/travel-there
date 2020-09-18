@@ -6,7 +6,7 @@ import { rootReducer } from './rootReducer'
 
 let store: Store
 
-if (process.env.NODE_ENV !== 'production') {
+if (__DEV__) {
   store = createStore(
     rootReducer,
     composeWithDevTools(applyMiddleware(reduxThunk))
