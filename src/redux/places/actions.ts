@@ -61,7 +61,6 @@ export const setPlaces = (): SetPlacesThunkAction => async (dispatch) => {
     const dbResult = await fetchPlaces()
     //@ts-expect-error
     if (typeof dbResult.message === 'undefined') {
-      console.log(dbResult)
       //@ts-ignore
       dispatch({ type: SET_PLACES, places: dbResult.rows._array })
     } else {

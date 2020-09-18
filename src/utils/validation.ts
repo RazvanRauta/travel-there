@@ -6,4 +6,6 @@ export const NewPlaceSchema = Yup.object().shape({
     .max(50, 'Too Long!')
     .required('Required'),
   image: Yup.string().min(2, 'Required').required('Required'),
+  lat: Yup.number().required('Required'),
+  lng: Yup.number().required('Required'),
 })
