@@ -15,7 +15,6 @@ const PlaceItem: FunctionComponent<Props> = ({
   image,
   title,
   address,
-  location,
 }: Props) => {
   return (
     <TouchableOpacity onPress={onSelect} style={styles.placeItem}>
@@ -23,7 +22,6 @@ const PlaceItem: FunctionComponent<Props> = ({
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.address}>{address}</Text>
-        <Text style={styles.address}>{location}</Text>
       </View>
     </TouchableOpacity>
   )

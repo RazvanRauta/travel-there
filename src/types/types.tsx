@@ -2,6 +2,7 @@ import Place from '@/models/place'
 import { ADD_PLACE, SET_PLACES } from '@/redux/places/actions'
 import { RootState } from '@/redux/rootReducer'
 import { StackScreenProps } from '@react-navigation/stack'
+import { LatLng } from 'react-native-maps'
 import { ThunkAction } from 'redux-thunk'
 
 export type RootStackParamList = {
@@ -12,7 +13,9 @@ export type RootStackParamList = {
     placeId: string
   }
   Map: undefined
-  NewPlace: undefined
+  NewPlace: {
+    pickedLocation?: LatLng
+  }
 }
 
 export type RootStackScreenProps = StackScreenProps<
@@ -29,6 +32,7 @@ export interface ValuesForNewPlace {
   title: string
   image: string
   location: string
+  address: string
 }
 
 export interface AddPlaceAction {

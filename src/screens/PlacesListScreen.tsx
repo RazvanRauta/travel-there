@@ -41,8 +41,6 @@ const PlacesListScreen: FunctionComponent<RootStackScreenProps> = ({
             })
           }
           {...itemData.item}
-          //@ts-ignore
-          address={null}
         />
       )}
     />

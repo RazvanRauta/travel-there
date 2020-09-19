@@ -1,8 +1,10 @@
 import Colors from '@/constants/Colors'
+import { RootStackParamList } from '@/types/types'
+import { RouteProp, useNavigation } from '@react-navigation/native'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import { useFormikContext, useField } from 'formik'
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
@@ -18,12 +20,26 @@ interface Props {
   name: string
   type: string
   readOnly: boolean
+  route: RouteProp<
+    RootStackParamList,
+    'NewPlace' | 'Home' | 'PlacesList' | 'PlaceDetail' | 'Map'
+  >
 }
 
 const LocationPicker: FunctionComponent<Props> = (props) => {
   const [isFetching, setIsFetching] = useState(false)
   const { setFieldValue } = useFormikContext()
   const [field, meta] = useField(props)
+  const navigation = useNavigation()
+  //@ts-ignore
+  const pickedLocation = props.route.params?.pickedLocation ?? undefined
+
+  useEffect(() => {
+    if (pickedLocation) {
+      const { latitude, longitude } = pickedLocation
+      setFieldValue(field.name, `${latitude}|${longitude}`)
+    }
+  }, [pickedLocation])
 
   const verifyPermission = async (): Promise<boolean> => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION)
@@ -60,13 +76,21 @@ const LocationPicker: FunctionComponent<Props> = (props) => {
     }
     setIsFetching(false)
   }
+
+  const pickOnMapHandler = () => navigation.navigate('Map')
+
   const location = meta.value ? meta.value.split('|') : ''
   const latValue = location[0] ?? ''
   const lngValue = location[1] ?? ''
 
   return (
     <View style={styles.locationPicker}>
-      <MapPreview lat={latValue} lng={lngValue} style={styles.mapPreview}>
+      <MapPreview
+        lat={latValue}
+        lng={lngValue}
+        style={styles.mapPreview}
+        onPress={pickOnMapHandler}
+      >
         {isFetching ? (
           <ActivityIndicator size="large" />
         ) : (
@@ -78,11 +102,18 @@ const LocationPicker: FunctionComponent<Props> = (props) => {
       {meta.touched && meta.error && (
         <Text style={styles.error}>{meta.error}</Text>
       )}
-      <Button
-        title="Get Current Location"
-        color={Colors.primary}
-        onPress={getLocationHandler}
-      />
+      <View style={styles.actions}>
+        <Button
+          title="Get Current Location"
+          color={Colors.primary}
+          onPress={getLocationHandler}
+        />
+        <Button
+          title="Pick on map"
+          color={Colors.primary}
+          onPress={pickOnMapHandler}
+        />
+      </View>
     </View>
   )
 }
@@ -100,5 +131,10 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     fontSize: 15,
+  },
+  actions: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
   },
 })

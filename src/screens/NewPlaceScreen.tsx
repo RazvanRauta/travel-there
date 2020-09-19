@@ -12,10 +12,11 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 import { useDispatch } from 'react-redux'
 
-type Values = Omit<ValuesForNewPlace, 'id'>
+type Values = Omit<ValuesForNewPlace, 'id' | 'address'>
 
 const NewPlaceScreen: FunctionComponent<RootStackScreenProps> = ({
   navigation,
+  route,
 }) => {
   const dispatch = useDispatch()
   const savePlaceHandler = (values: Values) => {
@@ -65,7 +66,12 @@ const NewPlaceScreen: FunctionComponent<RootStackScreenProps> = ({
                 error={errors.title}
               />
               <ImgPicker name="image" type="text" readOnly />
-              <LocationPicker name="location" type="text" readOnly />
+              <LocationPicker
+                name="location"
+                type="text"
+                readOnly
+                route={route}
+              />
             </View>
           )
         }}
