@@ -12,7 +12,10 @@ export type RootStackParamList = {
     placeTitle: string
     placeId: string
   }
-  Map: undefined
+  Map: {
+    readOnly?: boolean
+    initialLocation?: string[] | undefined
+  }
   NewPlace: {
     pickedLocation?: LatLng
   }

@@ -10,10 +10,18 @@ import React, {
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import MapView, { MapEvent, Region, Marker, LatLng } from 'react-native-maps'
 
-const MapScreen: FunctionComponent<RootStackScreenProps> = ({ navigation }) => {
-  const [selectedLocation, setSelectedLocation] = useState<LatLng | undefined>(
-    undefined
-  )
+const MapScreen: FunctionComponent<RootStackScreenProps> = ({
+  navigation,
+  route,
+}) => {
+  //@ts-ignore
+  const initialLocation = route.params?.initialLocation ?? ''
+  //@ts-ignore
+  const readOnly = route.params?.readOnly ?? false
+  const [selectedLocation, setSelectedLocation] = useState<LatLng | undefined>({
+    latitude: initialLocation ? parseFloat(initialLocation[0]) : 37.78,
+    longitude: initialLocation ? parseFloat(initialLocation[1]) : -122.43,
+  })
 
   const savePickedLocationHandler = useCallback(() => {
     if (!selectedLocation) return
@@ -22,24 +30,30 @@ const MapScreen: FunctionComponent<RootStackScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          style={styles.saveButton}
-          onPress={savePickedLocationHandler}
-        >
-          <Text style={styles.saveText}>Save</Text>
-        </TouchableOpacity>
-      ),
+      headerRight: () => {
+        if (!readOnly) {
+          return (
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={savePickedLocationHandler}
+            >
+              <Text style={styles.saveText}>Save</Text>
+            </TouchableOpacity>
+          )
+        }
+        return null
+      },
     })
   }, [savePickedLocationHandler])
 
   const mapRegion: Region = {
-    latitude: 37.78,
-    longitude: -122.43,
+    latitude: initialLocation[0] ? parseFloat(initialLocation[0]) : 37.78,
+    longitude: initialLocation[1] ? parseFloat(initialLocation[1]) : -122.43,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   }
   const setLocationHandler = (e: MapEvent) => {
+    if (readOnly) return
     setSelectedLocation({
       latitude: e.nativeEvent.coordinate.latitude,
       longitude: e.nativeEvent.coordinate.longitude,

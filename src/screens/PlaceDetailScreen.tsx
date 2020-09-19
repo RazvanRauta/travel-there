@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 
 const PlaceDetailScreen: FunctionComponent<RootStackScreenProps> = ({
   route,
+  navigation,
 }) => {
   //@ts-ignore
   const { placeId } = route.params
@@ -20,6 +21,12 @@ const PlaceDetailScreen: FunctionComponent<RootStackScreenProps> = ({
   } else {
     latLng = ''
   }
+
+  const showMapHandler = () =>
+    navigation.navigate('Map', {
+      readOnly: true,
+      initialLocation: selectedPlace?.location.split('|'),
+    })
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image style={styles.image} source={{ uri: selectedPlace?.image }} />
@@ -27,7 +34,12 @@ const PlaceDetailScreen: FunctionComponent<RootStackScreenProps> = ({
         <View style={styles.addressContainer}>
           <Text style={styles.address}>{selectedPlace?.address}</Text>
         </View>
-        <MapPreview lat={latLng[0]} lng={latLng[1]} style={styles.mapPreview} />
+        <MapPreview
+          lat={latLng[0]}
+          lng={latLng[1]}
+          style={styles.mapPreview}
+          onPress={showMapHandler}
+        />
       </View>
     </ScrollView>
   )
